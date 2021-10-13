@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const app = express();
+
 
 // create and config server
 const server = express();
@@ -34,3 +36,9 @@ server.get('/users/movies', (req, res) => {
   };
   res.json(response);
 });
+
+// STATIC 
+
+const staticServerPathWeb = "./public-react";
+app.use(express.static(staticServerPathWeb));
+
