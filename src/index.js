@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
-
-
+const movies = require("./data/movies.json");
 // create and config server
 const server = express();
 server.use(cors());
@@ -14,31 +12,36 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
+
+// STATIC  REACT
+
+const staticServerPathWeb = "./src/public-react";
+server.use(express.static(staticServerPathWeb));
+
+//STATIC IMAGES 
+const staticServerPathWeb2 = "./src/public-movies-images";
+server.use(express.static(staticServerPathWeb2));
+
+
 // endpoint fetch allmovies
 
 server.get('/users/movies', (req, res) => {
+  console.log(req.query.gender);
+  console.log(req.query.sort);
   const response = {
     success: true,
-    movies: [
-      {
-        id: '1',
-        title: 'Gambita de dama',
-        gender: 'Drama',
-        image: 'https://via.placeholder.com/150',
-      },
-      {
-        id: '2',
-        title: 'Friends',
-        gender: 'Comedia',
-        image: 'https://via.placeholder.com/150',
-      },
-    ],
-  };
+    movies
+  }
+  //const filterData = response.movies.filter((movieApi) => movieApi.gender === req.query.gender)
   res.json(response);
 });
 
-// STATIC 
+server.post('/login', (req, res) => {
+  console.log(req.body.userEmail)
+  console.log(req.body.userPass)
+  const response = {
 
-const staticServerPathWeb = "./public-react";
-app.use(express.static(staticServerPathWeb));
+  }
 
+  res.json(response);
+});

@@ -1,23 +1,39 @@
 // login
 
+
+
 const sendLoginToApi = data => {
+
+  const params = {
+    userEmail: data.email,
+    userPass: data.password
+
+  }
   console.log('Se están enviando datos al login:', data);
+  console.log(params)
   // CAMBIA ESTE FETCH PARA QUE APUNTE A UN ENDPOINT DE TU SERVIDOR, PIENSA SI DEBE SER GET O POST, PIENSA QUÉ DATOS DEBES ENVIAR, ETC
-  return fetch('//beta.adalab.es/curso-intensivo-fullstack-recursos/apis/netflix-v1/empty.json')
+  return fetch('http://localhost:4000/login', {
+    method: "POST",
+    body: JSON.stringify(params),
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
     .then(response => response.json())
-    .then(() => {
+    .then((data) => {
       // CAMBIA EL CONTENIDO DE ESTE THEN PARA GESTIONAR LA RESPUESTA DEL SERVIDOR Y RETORNAR AL COMPONENTE APP LO QUE NECESITA
-      if (data.email.includes('gmail')) {
-        return {
-          success: true,
-          userId: '123'
-        };
-      } else {
-        return {
-          success: false,
-          errorMessage: 'Usuario no encontrado'
-        };
-      }
+      //  if (data.email.includes('gmail')) {
+      //  return {
+      //       success: true,
+      //         userId: '123'
+      //     };
+      // } else {
+      //   return {
+      //     success: false,
+      //     errorMessage: 'Usuario no encontrado'
+      //         };
+      //       }
+      return data
     });
 };
 
