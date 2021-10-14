@@ -14,7 +14,6 @@ server.listen(serverPort, () => {
 
 
 // STATIC  REACT
-
 const staticServerPathWeb = "./src/public-react";
 server.use(express.static(staticServerPathWeb));
 
@@ -22,6 +21,14 @@ server.use(express.static(staticServerPathWeb));
 const staticServerPathWeb2 = "./src/public-movies-images";
 server.use(express.static(staticServerPathWeb2));
 
+
+//STATIC sass 
+const staticServerPathWeb3 = "./src/stylesheets";
+server.use(express.static(staticServerPathWeb3));
+
+// VIEW EJS
+
+server.set('view engine', 'ejs');
 
 // endpoint fetch allmovies
 
@@ -44,4 +51,18 @@ server.post('/login', (req, res) => {
   }
 
   res.json(response);
+});
+
+
+server.get("/movie/:movieId", (req, res) => {
+  console.log(("Url params movieId", req.params.movieId));
+  const foundMovie = movies.find((movie) => {
+    return movie.id === parseInt(req.params.movieId);
+  });
+
+  console.log(foundMovie);
+  //res.json(foundMovie)
+
+  res.render('movie', foundMovie)
+
 });
