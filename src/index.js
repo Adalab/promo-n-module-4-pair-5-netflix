@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const movies = require('./data/movies.json');
 const Database = require('better-sqlite3');
 const { query } = require('express');
 // create and config server
@@ -39,13 +38,14 @@ server.get('/users/movies', (req, res) => {
   //console.log(req.query.gender);
   //console.log(req.query.sort);
   //1-declarar mi query
-  const query = db.prepare('SELECT id, name, gender, image  FROM movies');
+  const query = db.prepare('SELECT *  FROM movies');
   //2-ejecutar la query
-  const foundUser = query.all();
+  const movies = query.all();
   const response = {
     success: true,
-    foundUser,
+    movies,
   };
+  console.log(response);
   res.json(response);
 });
 // const response = {
