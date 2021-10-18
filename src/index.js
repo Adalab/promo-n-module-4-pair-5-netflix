@@ -58,13 +58,18 @@ server.get('/users/movies', (req, res) => {
 server.post('/login', (req, res) => {
   console.log(req.body.userEmail);
   console.log(req.body.userPass);
-  const response = {};
-
+  const query = db.prepare('SELECT email = ?, password = ? FROM users');
+  const userAll = query.get(req.body.userEmail, req.body.userPass);
+  const response = {
+    success: true,
+    user: userAll,
+  };
+  console.log(userAll);
   res.json(response);
 });
 
 server.get('/movie/:movieId', (req, res) => {
-  console.log(('Url params movieId', req.params.movieId));
+  //console.log(('Url params movieId', req.params.movieId));
   const foundMovie = movies.find((movie) => {
     return movie.id === parseInt(req.params.movieId);
   });
@@ -74,3 +79,5 @@ server.get('/movie/:movieId', (req, res) => {
 
   res.render('movie', foundMovie);
 });
+
+server.post('/signup', (req, res) => {});
