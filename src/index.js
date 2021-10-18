@@ -58,7 +58,9 @@ server.get('/users/movies', (req, res) => {
 server.post('/login', (req, res) => {
   console.log(req.body.userEmail);
   console.log(req.body.userPass);
-  const query = db.prepare('SELECT email, password FROM users WHERE email = ? AND password =?');
+  const query = db.prepare(
+    'SELECT email, password FROM users WHERE email = ? AND password =?'
+  );
   const userAll = query.get(req.body.userEmail, req.body.userPass);
   const response = {
     success: true,
@@ -83,10 +85,10 @@ server.get('/movie/:movieId', (req, res) => {
 //MIRAR PQ SALE ERROR SERVER 500
 
 server.post('/signup', (req, res) => {
-  console.log(req.body.userEmail);
-  console.log(req.body.userPass);
+  console.log(req.body.email);
+  console.log(req.body.password);
   const query = db.prepare('INSERT INTO users (email, password) VALUES(?, ?)');
-  const userAll = query.run(req.body.userEmail, req.body.userPass);
+  const userAll = query.run(req.body.email, req.body.password);
   const response = {
     success: true,
     user: userAll,
