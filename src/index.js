@@ -96,3 +96,42 @@ server.post('/signup', (req, res) => {
   console.log(userAll);
   res.json(response);
 });
+
+
+// server.get('/user/movies', (req, res) => {
+//   const userId = req.header('user-id')
+//   console.log(userId)
+
+//   const query = db.prepare('SELECT * FROM movies, users, rel_movies_users WHERE users.id = rel_movies_users.userId AND movies.id = rel_movies_users.movieId AND users.id = ?');
+//   const movies = query.run(userId)
+//   const response = {
+//     success: true,
+//     movies: []
+//   };
+//   res.json(response)
+// });
+
+server.get('/user/movies', (req, res) => {
+  // preparamos la query para obtener los movieIds
+  const movieIdsQuery = db.prepare('SELECT movieId FROM rel_movies_users WHERE userId = ?');
+  // obtenemos el id de la usuaria
+  const userId = req.header('user-id');
+  // ejecutamos la query
+  const movieIds = movieIdsQuery.all(userId); // que nos devuelve algo como [{ movieId: 1 }, { movieId: 2 }];
+
+  // obtenemos las interrogaciones separadas por comas
+  const moviesIdsQuestions = movieIds.map(id => '?').join(', '); // que nos devuelve '?, ?'
+  // preparamos la segunda query para obtener todos los datos de las películas
+  const moviesQuery = db.prepare(`SELECT * FROM movies WHERE id IN (${moviesIdsQuestions})`);
+
+  // convertimos el array de objetos de ids anterior a un array de números
+  const moviesIdsNumbers = movieIds.map(movie => movie.movieId); // que nos devuelve [1.0, 2.0]
+  // ejecutamos segunda la query
+  const movies = moviesQuery.all(moviesIdsNumbers);
+
+  // respondemos a la petición con
+  res.json({
+    success: true,
+    movies: movies
+  });
+});

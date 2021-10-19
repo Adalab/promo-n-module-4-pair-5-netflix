@@ -11,10 +11,12 @@ import SignUp from './SignUp';
 import apiMovies from '../services/api-movies';
 import apiUser from '../services/api-user';
 import router from '../services/router';
+import ls from '../services/local-storage';
+
 
 const App = () => {
   // state: user
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(ls.get('userId', ''));
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -76,6 +78,10 @@ const App = () => {
   Con este evento enviamos los datos del login al servidor cuando la usuaria lanza el evento.
   Como queremos que el back devuelva el id de la usuaria sendLoginToApi recibe el email y la contraseña que ella haya escrito.
   */
+  useEffect(() => {
+    ls.set('userId', userId)
+  }, [userId]);
+
   const sendLoginToApi = loginData => {
     // Limpiamos el error antes de enviar los datos al API
     setLoginErrorMessage('');
